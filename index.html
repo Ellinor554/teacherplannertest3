@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lärarplattform - Veckoplanering</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#a69085">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Planering">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="flex flex-1 overflow-hidden">
+    <div id="main-sidebar" class="flex flex-col w-12 bg-[#b0a99f] border-r border-gray-300 z-30">
+        <button onclick="changeView('idag')" id="btn-idag" class="sidebar-btn">Idag</button>
+        <button onclick="changeView('oversikt')" id="btn-oversikt" class="sidebar-btn active">Översikt</button>
+        <button onclick="changeView('framtid')" id="btn-framtid" class="sidebar-btn">Framtid</button>
+        <button onclick="changeView('mandag')" id="btn-mandag" class="sidebar-btn">Måndag</button>
+        <button onclick="changeView('tisdag')" id="btn-tisdag" class="sidebar-btn">Tisdag</button>
+        <button onclick="changeView('onsdag')" id="btn-onsdag" class="sidebar-btn">Onsdag</button>
+        <button onclick="changeView('torsdag')" id="btn-torsdag" class="sidebar-btn">Torsdag</button>
+        <button onclick="changeView('fredag')" id="btn-fredag" class="sidebar-btn">Fredag</button>
+        <button onclick="changeView('lasarsplanering')" id="btn-lasarsplanering" class="sidebar-btn sidebar-btn-separator">Läsårsplanering</button>
+        <button onclick="openArchiveOverlay()" id="btn-archive" class="sidebar-btn sidebar-btn-archive">Arkiv</button>
+    </div>
+    <div class="flex-1 flex flex-col p-6 overflow-hidden">
+        <div class="flex justify-between items-center mb-6">
+            <div id="week-nav" class="flex items-center gap-4">
+                <button onclick="changeWeek(-1)" class="text-2xl font-bold hover:text-gray-600">&lsaquo;</button>
+                <h1 class="text-4xl serif-title">Vecka <span id="current-week-display">--</span></h1>
+                <button onclick="changeWeek(1)" class="text-2xl font-bold hover:text-gray-600">&rsaquo;</button>
+            </div>
+            <h1 id="academic-planning-title" class="hidden text-4xl serif-title">Läsårsplanering</h1>
+            <div class="flex items-center gap-3">
+                <button id="arkivera-top-btn" class="hidden arkivera-header-btn" onclick="archiveCurrentYear()">Arkivera Läsår</button>
+                <button id="kursplan-top-btn" class="hidden kursplan-header-btn" onclick="openCurriculumMap('view')">Kursplan</button>
+                <div id="digital-clock" class="clock-display tracking-widest">00:00</div>
+            </div>
+        </div>
+        <div id="view-idag" class="hidden overflow-y-auto custom-scrollbar pb-10">
+            <div class="idag-header">
+                <div class="idag-meta">
+                    <span id="idag-week"></span>
+                    <span class="idag-meta-sep">·</span>
+                    <span id="idag-date"></span>
+                </div>
+                <h1 class="idag-greeting">God morgon!</h1>
+            </div>
+            <div class="idag-squares">
+                <div class="idag-square">
+                    <h2 class="idag-square-title">Dina lektioner idag</h2>
+                    <div id="idag-lessons-content"></div>
+                </div>
+                <div class="idag-square">
+                    <h2 class="idag-square-title">Kom ihåg</h2>
+                    <div id="idag-notes-content"></div>
+                </div>
+                <div class="idag-square">
+                    <h2 class="idag-square-title">Att göra</h2>
+                    <div id="idag-todos-content"></div>
+                </div>
+            </div>
+        </div>
+        <div id="view-oversikt" class="grid grid-cols-5 gap-4 h-full overflow-y-auto custom-scrollbar pb-10"></div>
+        <div id="view-framtid" class="hidden overflow-y-auto custom-scrollbar pb-10">
+            <h2 class="text-xl mb-6 font-bold uppercase tracking-widest text-gray-400">Planera framåt</h2>
+            <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4" id="future-weeks-grid"></div>
+        </div>
+        <div id="view-day-detail" class="hidden flex flex-row gap-8 h-full overflow-hidden">
+            <div id="lesson-sidebar" class="w-1/3 flex flex-col overflow-y-auto pr-4 custom-scrollbar">
+                <div id="active-tool-container" class="hidden-tool card p-5 mb-6 border-[#a6857e]/20">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-2">
+                        <h3 id="tool-title" class="font-bold text-[#a6857e] uppercase text-xs tracking-widest">Verktyg</h3>
+                        <button onclick="closeTool()" class="text-gray-400 hover:text-black font-bold text-xl leading-none">&times;</button>
+                    </div>
+                    <div id="tool-content"></div>
+                </div>
+                <div class="flex justify-between items-end mb-4">
+                    <div>
+                        <h2 id="detail-day-name" class="text-4xl font-bold italic serif-title">Måndag</h2>
+                        <p id="detail-date" class="text-gray-500 text-sm font-medium"></p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openPlanningPresentationPicker()" class="bg-[#a6857e] text-white px-2 py-1 rounded text-xs font-medium hover:bg-[#92756e] transition-colors">Hämta</button>
+                        <button onclick="addLessonPrompt()" class="bg-[#9eb19a] text-white px-2 py-1 rounded text-xs font-medium hover:bg-[#8da089] transition-colors">+ Ny lektion</button>
+                        <button onclick="toggleSidebar()" title="Dölj sidopanel" class="bg-[#c8b49a] text-white px-2 py-1 rounded text-xs font-medium hover:bg-[#b8a48a] transition-colors">◀ Dölj</button>
+                    </div>
+                </div>
+                <div id="detail-lesson-list" class="space-y-4 pb-20"></div>
+            </div>
+            <div class="flex-grow w-2/3 card flex flex-col bg-white min-w-0 shadow-xl overflow-hidden">
+                <div id="smartboard-content" class="flex-1 overflow-y-auto custom-scrollbar p-10">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 id="sb-subject" class="text-6xl font-bold mb-2 text-[#a6857e] tracking-tight">Välj en lektion</h3>
+                            <p id="sb-time" class="text-2xl text-gray-300 italic"></p>
+                        </div>
+                        <button id="show-sidebar-btn" onclick="toggleSidebar()" title="Visa sidopanel" class="bg-[#c8b49a] text-white px-2 py-1 rounded text-xs font-medium hover:bg-[#b8a48a] transition-colors">▶ Visa</button>
+                    </div>
+                    <div id="sb-columns" class="flex gap-6 min-h-[500px]">
+                        <div id="sb-plan" class="flex-1 outline-none min-h-[500px] whitespace-pre-wrap pb-32 text-gray-700 relative" contenteditable="true" oninput="handleInput()" onpaste="handlePaste(event)" placeholder="Skriv din planering här..."></div>
+                        <div id="sb-plan-divider" class="hidden w-px bg-gray-100 self-stretch flex-shrink-0"></div>
+                        <div id="sb-plan-right" class="hidden flex-1 outline-none min-h-[500px] whitespace-pre-wrap pb-32 text-gray-700 relative" contenteditable="true" oninput="handleInputRight()" onpaste="handlePasteRight(event)" placeholder="Höger kolumn..."></div>
+                    </div>
+                </div>
+                <!-- Bottom toolbar -->
+                <div class="border-t border-gray-100 bg-[#faf9f8] px-6 py-3 flex items-center gap-3">
+                    <!-- Text formatting -->
+                    <button onclick="document.execCommand('bold')" title="Fet (Ctrl+B)" id="bold-btn" class="toolbar-btn w-7 h-7 font-bold text-sm">B</button>
+                    <button onclick="document.execCommand('italic')" title="Kursiv (Ctrl+I)" id="italic-btn" class="toolbar-btn w-7 h-7 text-sm">/</button>
+                    <button onclick="toggleNotesModal()" title="Privata lektionsanteckningar" id="notes-btn" class="toolbar-btn w-7 h-7 text-base">📝</button>
+                    <div class="w-px h-5 bg-gray-200 mx-1"></div>
+                    <!-- Font size -->
+                    <input type="range" min="16" max="80" value="32" title="Textstorlek" class="w-14 size-slider" oninput="updateFontSize(this.value)">
+                    <div class="w-px h-5 bg-gray-200 mx-1"></div>
+                    <!-- Image -->
+                    <button onclick="document.getElementById('image-upload').click()" title="Lägg till bild" class="toolbar-btn w-7 h-7 text-base">🖼</button>
+                    <input type="file" id="image-upload" accept="image/*" class="hidden" style="display:none" onchange="insertImageFromFile(this)">
+                    <!-- Split -->
+                    <button id="split-btn" onclick="toggleSplit()" title="Dela i två kolumner" class="toolbar-btn w-7 h-7 text-xs">⬜⬜</button>
+                    <div class="flex-1"></div>
+                    <button class="border border-gray-200 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-[10px] font-bold text-gray-400 uppercase tracking-widest transition" onclick="toggleFullscreen()">Helskärm</button>
+                </div>
+            </div>
+        </div>
+        <div id="view-lasarsplanering" class="hidden h-full overflow-hidden"></div>
+    </div>
+</div>
+
+<div id="bottom-toolbar" class="h-20 bg-[#f7f6f5] border-t border-gray-300 flex items-center px-8 gap-8 z-40">
+    <span class="font-bold text-[10px] uppercase tracking-[0.2em] text-gray-400">Verktygslåda</span>
+    <button id="todo-toggle-btn" onclick="toggleTodoPanel()" class="tool-cat-btn">
+        <svg class="tool-cat-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        Att göra
+    </button>
+    <div class="w-px h-6 bg-gray-200"></div>
+    <div id="tool-launcher-categories" class="flex gap-3 items-center"></div>
+
+    <div class="flex-1"></div>
+
+    <div class="settings-wrapper">
+        <button onclick="toggleSettingsMenu()" id="settings-btn" class="tool-cat-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="tool-cat-icon">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            Inställningar
+        </button>
+
+        <div id="settings-menu" class="settings-menu hidden">
+            <div id="file-status" class="settings-status">localStorage (ingen diskfil kopplad)</div>
+            <div class="settings-divider"></div>
+            <button onclick="savePlannerAs(); toggleSettingsMenu()" class="settings-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Spara lektionsplanering...
+            </button>
+            <button onclick="openPlannerFile(); toggleSettingsMenu()" class="settings-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                </svg>
+                Öppna sparad fil...
+            </button>
+            <div class="settings-divider"></div>
+            <button onclick="downloadBackup(); toggleSettingsMenu()" class="settings-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="12" y1="18" x2="12" y2="12"/>
+                    <polyline points="9 15 12 18 15 15"/>
+                </svg>
+                Ladda ner backup
+            </button>
+            <input type="file" id="import-file-input" accept=".json" class="hidden" onchange="importBackup(event)">
+            <button onclick="triggerImportBackup()" class="settings-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="12" y1="12" x2="12" y2="18"/>
+                    <polyline points="9 15 12 12 15 15"/>
+                </svg>
+                Importera backup
+            </button>
+            <div class="settings-divider"></div>
+            <div class="presentation-settings-panel">
+                <p class="presentation-settings-title">Sparade presentationer</p>
+                <div class="presentation-settings-add">
+                    <input id="settings-presentation-name" class="presentation-settings-input" type="text" placeholder="Namn (valfritt)">
+                    <input id="settings-presentation-url" class="presentation-settings-input" type="url" placeholder="Google Slides-länk">
+                    <button onclick="addSavedPresentationFromSettings()" class="presentation-settings-add-btn" type="button">Lägg till</button>
+                </div>
+                <div id="settings-presentation-list" class="presentation-settings-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="toolbar-toggle-btn" 
+        onclick="toggleBottomToolbar()"
+        class="fixed bottom-6 right-6 w-14 h-14 bg-white rounded-3xl shadow-2xl border border-gray-200 flex items-center justify-center text-3xl z-[100] active:scale-95 transition-all hover:border-[#a6857e]">
+    🛠️
+</button>
+
+<!-- Private lesson notes modal -->
+<div id="lesson-notes-modal" class="notes-modal hidden" onclick="handleNotesModalBackdrop(event)">
+    <div class="notes-modal-content" onclick="event.stopPropagation()">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h3 class="font-bold text-[#a6857e] uppercase text-xs tracking-widest">🔒 Privata lektionsanteckningar</h3>
+                <p id="notes-modal-lesson-name" class="text-sm text-gray-500 mt-1"></p>
+            </div>
+            <button onclick="closeNotesModal()" class="text-gray-400 hover:text-black font-bold text-xl leading-none">&times;</button>
+        </div>
+        <textarea id="private-notes-textarea" class="private-notes-area custom-scrollbar" placeholder="Skriv privata anteckningar för denna lektion... (syns bara för dig)"></textarea>
+        <div id="private-notes-preview" class="private-notes-preview custom-scrollbar" aria-live="polite"></div>
+        <div class="flex justify-between items-center mt-4">
+            <span class="text-[10px] text-gray-400 italic">🔒 Visas bara för läraren – ej i elevvy</span>
+            <button onclick="savePrivateNotes(); closeNotesModal();" class="bg-[#a6857e] text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-[#92756e] transition-all">Spara &amp; stäng</button>
+        </div>
+    </div>
+</div>
+
+<div id="planning-presentation-modal" class="notes-modal hidden" onclick="closePlanningPresentationPicker()">
+    <div class="notes-modal-content planning-picker-modal" onclick="event.stopPropagation()">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h3 class="font-bold text-[#a6857e] uppercase text-xs tracking-widest">Hämta från planering</h3>
+                <p id="planning-presentation-modal-subject" class="text-sm text-gray-500 mt-1"></p>
+            </div>
+            <button onclick="closePlanningPresentationPicker()" class="text-gray-400 hover:text-black font-bold text-xl leading-none">&times;</button>
+        </div>
+        <div id="planning-presentation-modal-list" class="planning-picker-list custom-scrollbar"></div>
+    </div>
+</div>
+
+<!-- Todo slide-out panel -->
+<div id="todo-panel">
+    <div class="todo-panel-header">
+        <h2 class="todo-panel-title">Att göra</h2>
+        <button class="todo-close-btn" onclick="closeTodoPanel()" aria-label="Stäng panelen">×</button>
+    </div>
+    <div class="todo-panel-body">
+        <input id="todo-input" type="text" class="todo-input" placeholder="Lägg till uppgift..." autocomplete="off">
+        <ul id="todo-active-list" class="todo-list"></ul>
+        <button class="todo-completed-header" onclick="toggleCompletedSection()">
+            <span>Visa avklarade<span id="todo-completed-count"></span></span>
+            <span id="todo-completed-arrow">▼</span>
+        </button>
+        <ul id="todo-completed-list" class="todo-list hidden"></ul>
+    </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
