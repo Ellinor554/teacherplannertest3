@@ -40,6 +40,10 @@ export function renderIdag() {
     const weekKey = `${today.getFullYear()}-W${weekNum}`;
 
     // ── Header ──
+    const hour = today.getHours();
+    const greeting = hour >= 12 ? 'God eftermiddag!' : hour >= 10 ? 'God förmiddag!' : 'God morgon!';
+    document.getElementById('idag-greeting').textContent = greeting;
+
     document.getElementById('idag-week').textContent = `Vecka ${weekNum}`;
     document.getElementById('idag-date').textContent =
         `${days[dayIndex]} ${today.getDate()} ${months[today.getMonth()]}`;
