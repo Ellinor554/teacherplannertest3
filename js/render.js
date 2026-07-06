@@ -132,7 +132,7 @@ export function renderDayDetail() {
             const sbSubject = document.getElementById('sb-subject');
             sbSubject.innerText = lesson.subject;
             sbSubject.style.color = color ? color.bg : '#a6857e';
-            document.getElementById('sb-time').innerText = 'Klockan ' + lesson.time;
+            document.getElementById('sb-time').innerText = lesson.time;
             document.getElementById('sb-plan').innerHTML = lesson.plan || '';
             document.getElementById('sb-plan-right').innerHTML = lesson.planRight || '';
             const isSplit = !!lesson.planRight || lesson.split;
