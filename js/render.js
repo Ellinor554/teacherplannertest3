@@ -84,9 +84,14 @@ export function renderDayDetail() {
     const monday = getMonday(currentYear, currentWeek);
     const thisDate = new Date(monday);
     thisDate.setDate(monday.getDate() + activeDayIndex);
-    document.getElementById('detail-day-name').innerText = days[activeDayIndex];
-    document.getElementById('detail-date').innerText =
-        `${thisDate.getDate()} ${months[thisDate.getMonth()]} ${currentYear}`;
+    const dayName = days[activeDayIndex];
+    const dateStr = `${thisDate.getDate()} ${months[thisDate.getMonth()]} ${currentYear}`;
+    document.getElementById('detail-day-name').innerText = dayName;
+    document.getElementById('detail-date').innerText = dateStr;
+    const dayNavName = document.getElementById('day-nav-name');
+    const dayNavDate = document.getElementById('day-nav-date');
+    if (dayNavName) dayNavName.innerText = dayName;
+    if (dayNavDate) dayNavDate.innerText = dateStr;
 
     if (!activeLessonId && lessons.length > 0) setActiveLessonId(lessons[0].id);
 
