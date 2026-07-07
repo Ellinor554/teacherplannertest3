@@ -88,6 +88,7 @@ window.closeTodoPanel      = closeTodoPanel;
 window.toggleTodoDone      = toggleTodoDone;
 window.deleteTodoItem      = deleteTodoItem;
 window.toggleCompletedSection = toggleCompletedSection;
+window.formatText = (command) => { try { document.execCommand(command); } catch(e) {} };
 window.addSavedPresentationFromSettings = addSavedPresentationFromSettings;
 window.openPlanningPresentationPicker = openPlanningPresentationPicker;
 window.closePlanningPresentationPicker = closePlanningPresentationPicker;

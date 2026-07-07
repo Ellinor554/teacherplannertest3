@@ -152,7 +152,7 @@ function findSubjectByNameInternal(subjectName) {
     if (!normalized) return null;
     return getAllSubjects().find((subject) => {
         for (const alias of getLookupTerms(subject)) {
-            if (normalized === alias || normalized.startsWith(alias)) {
+            if (normalized === alias) {
                 return true;
             }
         }

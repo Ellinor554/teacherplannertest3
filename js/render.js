@@ -5,7 +5,7 @@ import {
 } from './state.js';
 import { getSubjectColor, getMonday, checkIsPlanned, isoWeeksInYear } from './utils.js';
 import { sortPlannerData } from './data.js';
-import { makeDraggable } from './images.js';
+import { makeImageDraggable } from './images.js';
 import { updateNotesButtonState } from './notes.js';
 import { saveAndClearLessonTools, restoreLessonTools } from './tools.js';
 
@@ -145,7 +145,7 @@ export function renderDayDetail() {
                     const resizeHandle = wrapper.querySelector('.img-resize-handle');
                     const delBtn       = wrapper.querySelector('.img-delete-btn');
                     const cb = sel === '#sb-plan-right' ? _handleInputRight : _handleInput;
-                    if (resizeHandle) makeDraggable(wrapper, resizeHandle, cb);
+                    if (resizeHandle) makeImageDraggable(wrapper, resizeHandle, cb);
                     if (delBtn) delBtn.onmousedown = (e) => { e.stopPropagation(); wrapper.remove(); cb(); };
                 });
             });

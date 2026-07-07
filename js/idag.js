@@ -35,6 +35,7 @@ function escapeHtml(str) {
 
 export function renderIdag() {
     const { today, dayIndex } = todayInfo();
+    if (dayIndex < 0 || dayIndex > 4) return; // weekend — nothing to show
 
     const weekNum = getWeekNumber(today);
     const weekKey = `${getISOWeekYear(today)}-W${weekNum}`;

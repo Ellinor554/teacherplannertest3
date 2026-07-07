@@ -97,5 +97,5 @@ export function handlePasteRight(e) {
 export function goToDayAndAdd(dayIdx) {
     const viewName = ['mandag', 'tisdag', 'onsdag', 'torsdag', 'fredag'][dayIdx];
     changeView(viewName);
-    setTimeout(() => addLessonPrompt(), 100);
+    setTimeout(() => addLessonPrompt(), 0);
 }

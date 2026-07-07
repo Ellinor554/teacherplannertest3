@@ -1,12 +1,12 @@
-export function makeDraggable(wrapper, resizeHandle, onSave) {
+export function makeImageDraggable(wrapper, resizeHandle, onSave) {
     wrapper.addEventListener('mousedown', function (e) {
         if (e.target === resizeHandle) return;
         e.preventDefault();
         const startX = e.clientX - wrapper.offsetLeft;
         const startY = e.clientY - wrapper.offsetTop;
         function onMove(e) {
-            wrapper.style.left = (e.clientX - startX) + 'px';
-            wrapper.style.top  = (e.clientY - startY) + 'px';
+            wrapper.style.left = Math.max(0, e.clientX - startX) + 'px';
+            wrapper.style.top  = Math.max(0, e.clientY - startY) + 'px';
         }
         function onUp() {
             document.removeEventListener('mousemove', onMove);
@@ -65,7 +65,7 @@ export function insertImageBlobInto(blob, container, onSave) {
         wrapper.appendChild(resizeHandle);
         wrapper.contentEditable = false;
         container.appendChild(wrapper);
-        makeDraggable(wrapper, resizeHandle, onSave);
+        makeImageDraggable(wrapper, resizeHandle, onSave);
         onSave();
     };
     reader.readAsDataURL(blob);

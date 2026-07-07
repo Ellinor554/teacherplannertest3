@@ -1171,13 +1171,12 @@ export function closeFloatingTool(el) {
     if (lessonKey) _saveToolsForKey(lessonKey);
 }
 
-/** Legacy close – clears shared timer/stopwatch state (kept for compatibility). */
+/** Legacy close for the in-panel tool container. Does not touch timer/stopwatch state. */
 export function closeTool() {
-    clearInterval(timerInterval);
-    setTimerInterval(null);
-    clearInterval(stopwatchInterval);
-    setStopwatchInterval(null);
-    setStopwatchRunning(false);
+    const container = document.getElementById('active-tool-container');
+    if (container) container.classList.add('hidden-tool');
+    const content = document.getElementById('tool-content');
+    if (content) content.innerHTML = '';
 }
 
 function generateMultiTable() {
