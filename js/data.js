@@ -88,8 +88,10 @@ export function propagateToFutureWeeks(sourceKey) {
     for (let i = 1; i <= 52; i++) {
         let futureW = currentWeek + i;
         let futureY = currentYear;
-        const weeksInFutureY = isoWeeksInYear(futureY);
-        if (futureW > weeksInFutureY) { futureW -= weeksInFutureY; futureY++; }
+        while (futureW > isoWeeksInYear(futureY)) {
+            futureW -= isoWeeksInYear(futureY);
+            futureY++;
+        }
         const futureKey = `${futureY}-W${futureW}`;
         if (weekHasCustomContent(futureKey)) continue;
         copySchedule(sourceKey, futureKey);

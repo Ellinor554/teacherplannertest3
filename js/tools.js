@@ -283,6 +283,18 @@ function _closeAllPopups() {
 // ── openTool ─────────────────────────────────────────────────────────────────
 
 export function openTool(type, options = {}) {
+    // Timer and stopwatch share global state — only one of each can run correctly.
+    // If one is already open, focus it instead of opening a duplicate.
+    if (type === 'timer' || type === 'stopwatch') {
+        const existing = document.querySelector(`.floating-tool[data-tool-type="${type}"]`);
+        if (existing) {
+            existing.style.zIndex = (parseInt(existing.style.zIndex) || 100) + 1;
+            existing.style.outline = '2px solid #a6857e';
+            setTimeout(() => { existing.style.outline = ''; }, 800);
+            return;
+        }
+    }
+
     const label = _getLabel(type);
     const savedState  = options._savedState  || null;
     const lessonKey   = options._lessonKey   || _activeToolsLessonKey || null;

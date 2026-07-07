@@ -56,7 +56,12 @@ export async function openPlannerFile(refreshUICallback) {
         setCurrentFileHandle(handle);
         const file = await handle.getFile();
         const text = await file.text();
-        setPlannerData(JSON.parse(text) || {});
+        const parsed = JSON.parse(text);
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+            alert('Ogiltig fil: filen innehåller inte giltig planeringsdata.');
+            return;
+        }
+        setPlannerData(parsed);
         migrateData();
         refreshUICallback();
         updateFileStatus(`📂 ${handle.name}`);
@@ -80,7 +85,12 @@ export function importBackup(e, refreshUICallback) {
     const reader = new FileReader();
     reader.onload = function (ev) {
         try {
-            setPlannerData(JSON.parse(ev.target.result) || {});
+            const parsed = JSON.parse(ev.target.result);
+            if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+                alert('Ogiltig fil: filen innehåller inte giltig planeringsdata.');
+                return;
+            }
+            setPlannerData(parsed);
             migrateData();
             refreshUICallback();
             alert('✅ Backup importerad från disk!');

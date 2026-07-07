@@ -47,7 +47,7 @@ export function handleInput() {
     if (!activeLessonId) return;
     const planContent = document.getElementById('sb-plan').innerHTML;
     const weekKey = `${currentYear}-W${currentWeek}`;
-    const lesson = (plannerData[weekKey].lessons[activeDayIndex] || [])
+    const lesson = (plannerData[weekKey]?.lessons?.[activeDayIndex] || [])
         .find(l => l.id === activeLessonId);
     if (lesson) {
         lesson.plan = planContent;
@@ -66,7 +66,7 @@ export function handleInput() {
 export function handleInputRight() {
     if (!activeLessonId) return;
     const weekKey = `${currentYear}-W${currentWeek}`;
-    const lesson = (plannerData[weekKey].lessons[activeDayIndex] || [])
+    const lesson = (plannerData[weekKey]?.lessons?.[activeDayIndex] || [])
         .find(l => l.id === activeLessonId);
     if (lesson) {
         lesson.planRight = document.getElementById('sb-plan-right').innerHTML;

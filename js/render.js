@@ -1,9 +1,9 @@
 import { days, months } from './config.js';
 import {
     plannerData, currentYear, currentWeek,
-    activeDayIndex, activeLessonId, setActiveLessonId
+    activeDayIndex, activeLessonId, setActiveLessonId, setIsSplitActive
 } from './state.js';
-import { getSubjectColor, getMonday, checkIsPlanned } from './utils.js';
+import { getSubjectColor, getMonday, checkIsPlanned, isoWeeksInYear } from './utils.js';
 import { sortPlannerData } from './data.js';
 import { makeDraggable } from './images.js';
 import { updateNotesButtonState } from './notes.js';
@@ -137,6 +137,7 @@ export function renderDayDetail() {
             document.getElementById('sb-plan-right').innerHTML = lesson.planRight || '';
             const isSplit = !!lesson.planRight || lesson.split;
             setSplitView(isSplit);
+            setIsSplitActive(isSplit);
 
             ['#sb-plan', '#sb-plan-right'].forEach(sel => {
                 document.querySelectorAll(sel + ' .img-wrapper').forEach(wrapper => {
@@ -164,11 +165,12 @@ export function renderDayDetail() {
 export function renderFutureWeeks() {
     const grid = document.getElementById('future-weeks-grid');
     grid.innerHTML = '';
-    for (let i = 1; i <= 52; i++) {
+    const totalWeeks = isoWeeksInYear(currentYear);
+    for (let i = 1; i <= totalWeeks; i++) {
         const card = document.createElement('div');
         const isCurrent = i === currentWeek;
         card.className = `card p-5 flex flex-col items-center justify-center cursor-pointer hover:bg-white transition-all border-none ${isCurrent ? 'ring-2 ring-[#a6857e] bg-white' : 'bg-white/50 opacity-60 hover:opacity-100'}`;
-        card.onclick = () => window.changeWeekTo(i);
+        card.onclick = () => window.changeWeekTo(i, currentYear);
         card.innerHTML = `<div class="text-[9px] text-gray-400 uppercase font-bold mb-1">${currentYear}</div><div class="font-bold text-lg text-[#a6857e]">v.${i}</div>`;
         grid.appendChild(card);
     }

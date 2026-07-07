@@ -3,6 +3,7 @@ import {
 } from './state.js';
 import { saveData } from './persistence.js';
 import { getSubjectByKey, getSubjects, openSubjectManager, resolveSubjectKey } from './subjects.js';
+import { isoWeeksInYear } from './utils.js';
 
 const ACADEMIC_STORAGE_KEY = 'teacherplanner_academic_year_planning';
 
@@ -54,7 +55,7 @@ function createId(prefix) {
 function sanitizeWeek(value, fallback = 1) {
     const parsed = Number.parseInt(value, 10);
     if (!Number.isFinite(parsed)) return fallback;
-    return Math.max(1, Math.min(52, parsed));
+    return Math.max(1, Math.min(isoWeeksInYear(currentYear), parsed));
 }
 
 function normalizeCoreContentText(value) {
@@ -873,7 +874,7 @@ function buildAreaPanel(container) {
         const startWeekInput = document.createElement('input');
         startWeekInput.type = 'number';
         startWeekInput.min = '1';
-        startWeekInput.max = '52';
+        startWeekInput.max = String(isoWeeksInYear(currentYear));
         startWeekInput.value = sanitizeWeek(area.startWeek, 1);
         startWeekInput.className = 'academic-week-num-input';
         startWeekInput.addEventListener('click', (e) => e.stopPropagation());
@@ -885,7 +886,7 @@ function buildAreaPanel(container) {
         const endWeekInput = document.createElement('input');
         endWeekInput.type = 'number';
         endWeekInput.min = '1';
-        endWeekInput.max = '52';
+        endWeekInput.max = String(isoWeeksInYear(currentYear));
         endWeekInput.value = sanitizeWeek(area.endWeek, sanitizeWeek(area.startWeek, 1));
         endWeekInput.className = 'academic-week-num-input';
         endWeekInput.addEventListener('click', (e) => e.stopPropagation());
@@ -1737,7 +1738,7 @@ function openReuseWeekModal(subjectKey, archivedArea) {
     const startInput = document.createElement('input');
     startInput.type = 'number';
     startInput.min = '1';
-    startInput.max = '52';
+    startInput.max = String(isoWeeksInYear(currentYear));
     startInput.value = sanitizeWeek(archivedArea.startWeek, 1);
     startInput.className = 'archive-week-input';
 
@@ -1747,7 +1748,7 @@ function openReuseWeekModal(subjectKey, archivedArea) {
     const endInput = document.createElement('input');
     endInput.type = 'number';
     endInput.min = '1';
-    endInput.max = '52';
+    endInput.max = String(isoWeeksInYear(currentYear));
     endInput.value = sanitizeWeek(archivedArea.endWeek, sanitizeWeek(archivedArea.startWeek, 1));
     endInput.className = 'archive-week-input';
 

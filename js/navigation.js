@@ -60,6 +60,7 @@ export function changeView(view) {
     } else if (view === 'framtid') {
         document.getElementById('view-framtid').classList.remove('hidden');
         document.getElementById('btn-framtid').classList.add('active');
+        renderFutureWeeks();
     } else if (view === 'lasarsplanering') {
         document.getElementById('view-lasarsplanering').classList.remove('hidden');
         document.getElementById('btn-lasarsplanering').classList.add('active');
@@ -83,8 +84,9 @@ export function changeWeek(delta) {
     refreshUI();
 }
 
-export function changeWeekTo(w) {
+export function changeWeekTo(w, y) {
     setCurrentWeek(w);
+    if (y !== undefined) setCurrentYear(y);
     refreshUI();
     changeView('oversikt');
 }
