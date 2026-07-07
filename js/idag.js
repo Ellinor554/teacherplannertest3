@@ -60,11 +60,12 @@ export function renderIdag() {
             const dotStyle = color ? `style="background-color:${color.bg}"` : '';
             const planned  = checkIsPlanned(lesson.plan);
             return `
-                <div class="idag-lesson-item">
+                <div class="idag-lesson-item idag-lesson-item--clickable" onclick="window.goToLesson(${dayIndex}, ${lesson.id})">
                     <span class="idag-lesson-time">${escapeHtml(lesson.time)}</span>
                     <span class="idag-lesson-dot" ${dotStyle}></span>
                     <span class="idag-lesson-subject">${escapeHtml(lesson.subject)}</span>
                     ${planned ? '<span class="idag-planned-badge">Planerad</span>' : ''}
+                    <span class="idag-lesson-arrow">›</span>
                 </div>`;
         }).join('');
     }

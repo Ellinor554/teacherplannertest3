@@ -1982,6 +1982,20 @@ body { font-family: 'Inter', sans-serif; background-color: #e5e3df; color: #444;
     border-bottom: 1px solid #f0eeed;
 }
 .idag-lesson-item:last-child { border-bottom: none; }
+.idag-lesson-item--clickable {
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 9px 8px;
+    margin: 0 -8px;
+    transition: background 0.15s;
+}
+.idag-lesson-item--clickable:hover { background: #f5f2f0; }
+.idag-lesson-arrow {
+    margin-left: auto;
+    color: #c5beba;
+    font-size: 18px;
+    line-height: 1;
+}
 
 .idag-lesson-time {
     font-size: 11px;
