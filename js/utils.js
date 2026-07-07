@@ -7,6 +7,14 @@ export function getWeekNumber(d) {
     return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
 
+// Returns the ISO week-year, which can differ from the calendar year on
+// 29–31 Dec (already week 1 of next year) or 1–3 Jan (still week 52/53 of last year).
+export function getISOWeekYear(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    return d.getUTCFullYear();
+}
+
 export function getSubjectColor(subject) {
     return getSubjectColorForName(subject);
 }

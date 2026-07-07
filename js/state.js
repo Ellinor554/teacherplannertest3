@@ -1,13 +1,22 @@
-import { getWeekNumber } from './utils.js';
+import { getWeekNumber, getISOWeekYear } from './utils.js';
 
 const today = new Date();
 
 export let currentWeek = getWeekNumber(today);
-export let currentYear = today.getFullYear();
+export let currentYear = getISOWeekYear(today); // ISO week year, not Gregorian — differs on 29–31 Dec
 export let activeView = 'oversikt';
 export let activeDayIndex = 0;
 export let activeLessonId = null;
-export let plannerData = JSON.parse(localStorage.getItem('teacher_planner_data')) || {};
+
+function loadPlannerData() {
+    try {
+        return JSON.parse(localStorage.getItem('teacher_planner_data')) || {};
+    } catch {
+        console.warn('Kunde inte läsa sparad data – startar med tom planering.');
+        return {};
+    }
+}
+export let plannerData = loadPlannerData();
 
 export let timerInterval = null;
 export let timerSeconds = 0;

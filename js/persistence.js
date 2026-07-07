@@ -3,7 +3,15 @@ import { migrateData } from './data.js';
 
 export async function saveData() {
     // Always keep localStorage as safety net (works everywhere, survives reloads)
-    localStorage.setItem('teacher_planner_data', JSON.stringify(plannerData));
+    try {
+        localStorage.setItem('teacher_planner_data', JSON.stringify(plannerData));
+    } catch (err) {
+        if (err.name === 'QuotaExceededError' || err.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+            alert('⚠️ Lagringsutrymmet är fullt!\n\nDatan kunde inte sparas. Ta bort några bilder från lektionsplaneringarna, eller ladda ner en backup och rensa.');
+        } else {
+            console.warn('Kunde inte spara till localStorage:', err);
+        }
+    }
 
     // If user has chosen a real JSON file on disk → auto-save there too
     if (currentFileHandle) {

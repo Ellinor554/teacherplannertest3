@@ -1,5 +1,5 @@
 import { plannerData } from './state.js';
-import { getWeekNumber, getSubjectColor, checkIsPlanned } from './utils.js';
+import { getWeekNumber, getISOWeekYear, getSubjectColor, checkIsPlanned } from './utils.js';
 import { days, months } from './config.js';
 
 const TODO_KEY      = 'teacherplanner_todos';
@@ -37,7 +37,7 @@ export function renderIdag() {
     const { today, dayIndex } = todayInfo();
 
     const weekNum = getWeekNumber(today);
-    const weekKey = `${today.getFullYear()}-W${weekNum}`;
+    const weekKey = `${getISOWeekYear(today)}-W${weekNum}`;
 
     // ── Header ──
     const hour = today.getHours();
