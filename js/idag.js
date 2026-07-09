@@ -42,7 +42,11 @@ export function renderIdag() {
 
     // ── Header ──
     const hour = today.getHours();
-    const greeting = hour >= 12 ? 'God eftermiddag!' : hour >= 10 ? 'God förmiddag!' : 'God morgon!';
+    const greeting = hour >= 18 ? 'God kväll!'
+                   : hour >= 14 ? 'God eftermiddag!'
+                   : hour >= 12 ? 'God dag!'
+                   : hour >= 10 ? 'God förmiddag!'
+                   : 'God morgon!';
     document.querySelector('.idag-greeting').textContent = greeting;
 
     document.getElementById('idag-week').textContent = `Vecka ${weekNum}`;
