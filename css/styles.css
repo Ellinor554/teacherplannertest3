@@ -2797,6 +2797,7 @@ body { font-family: 'Inter', sans-serif; background-color: #e5e3df; color: #444;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    cursor: text;
     transition: border-color 0.15s;
 }
 .framtid-day-cell:focus-within {
@@ -2824,23 +2825,8 @@ body { font-family: 'Inter', sans-serif; background-color: #e5e3df; color: #444;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    cursor: default;
 }
-.framtid-event-input {
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid #ece9e5;
-    background: transparent;
-    font-size: 10px;
-    font-family: 'Inter', sans-serif;
-    color: #444;
-    outline: none;
-    padding: 2px 1px;
-    transition: border-color 0.15s;
-    box-sizing: border-box;
-    flex-shrink: 0;
-}
-.framtid-event-input::placeholder { color: #d4d0cb; font-style: italic; }
-.framtid-event-input:focus { border-bottom-color: #a6857e; }
 .framtid-note-area {
     flex: 1;
     width: 100%;
@@ -2848,15 +2834,11 @@ body { font-family: 'Inter', sans-serif; background-color: #e5e3df; color: #444;
     background: transparent;
     font-size: 10px;
     font-family: 'Inter', sans-serif;
-    color: #555;
+    color: #444;
     outline: none;
     resize: none;
     padding: 1px;
-    line-height: 1.45;
-    min-height: 38px;
+    line-height: 1.5;
     box-sizing: border-box;
-    transition: background 0.15s;
-    border-radius: 4px;
+    cursor: text;
 }
-.framtid-note-area::placeholder { color: #d4d0cb; font-style: italic; }
-.framtid-note-area:focus { background: #faf8f6; }

@@ -127,16 +127,15 @@ export function renderFramtid() {
 
         // Day cells (Mon=0 … Sun=6)
         weekDays.forEach((date, dayIdx) => {
-            const inMonth  = date.getMonth() === viewMonth && date.getFullYear() === viewYear;
-            const isToday  = date.toDateString() === today.toDateString();
-            const isWeekday = dayIdx <= 4;
+            const inMonth = date.getMonth() === viewMonth && date.getFullYear() === viewYear;
+            const isToday = date.toDateString() === today.toDateString();
 
             const cell = document.createElement('div');
             cell.className = [
                 'framtid-day-cell',
-                !inMonth  ? 'framtid-other-month' : '',
-                isToday   ? 'framtid-today'        : '',
-                !isWeekday ? 'framtid-weekend'     : '',
+                !inMonth       ? 'framtid-other-month' : '',
+                isToday        ? 'framtid-today'       : '',
+                dayIdx > 4     ? 'framtid-weekend'     : '',
             ].filter(Boolean).join(' ');
 
             // Date number
@@ -145,22 +144,17 @@ export function renderFramtid() {
             dateEl.textContent = date.getDate();
             cell.appendChild(dateEl);
 
-            // Event (single-line)
-            const eventEl = document.createElement('input');
-            eventEl.type = 'text';
-            eventEl.className = 'framtid-event-input';
-            eventEl.placeholder = 'Händelse...';
-            eventEl.value = plannerData[weekKey]?.dayEvents?.[dayIdx] ?? '';
-            eventEl.addEventListener('input', e => saveEvent(weekKey, dayIdx, e.target.value));
-            cell.appendChild(eventEl);
-
-            // Note (multi-line)
+            // Single note area — transparent until focused or has content
             const noteEl = document.createElement('textarea');
             noteEl.className = 'framtid-note-area custom-scrollbar';
-            noteEl.placeholder = 'Anteckning...';
             noteEl.value = plannerData[weekKey]?.dayNotes?.[dayIdx] ?? '';
             noteEl.addEventListener('input', e => saveNote(weekKey, dayIdx, e.target.value));
             cell.appendChild(noteEl);
+
+            // Clicking anywhere in the cell focuses the textarea
+            cell.addEventListener('click', (e) => {
+                if (e.target !== noteEl) noteEl.focus();
+            });
 
             grid.appendChild(cell);
         });
