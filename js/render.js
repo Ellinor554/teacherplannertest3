@@ -26,7 +26,12 @@ export function renderOversikt() {
     const monday = getMonday(currentYear, currentWeek);
     const wasCopied = plannerData[weekKey] && plannerData[weekKey]._copiedFrom;
     if (!plannerData[weekKey] || !plannerData[weekKey].lessons) {
-        plannerData[weekKey] = { lessons: [[], [], [], [], []], dayNotes: ['', '', '', '', ''] };
+        const existing = plannerData[weekKey];
+        plannerData[weekKey] = {
+            lessons: [[], [], [], [], []],
+            dayNotes:  (existing?.dayNotes)  ?? ['', '', '', '', ''],
+            dayEvents: (existing?.dayEvents) ?? ['', '', '', '', ''],
+        };
     }
     days.forEach((dayName, idx) => {
         const date = new Date(monday);

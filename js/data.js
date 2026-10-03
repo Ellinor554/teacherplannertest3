@@ -47,8 +47,9 @@ export function sortPlannerData(weekKey, dayIdx) {
 export function copySchedule(sourceKey, targetKey) {
     const sourceLessons = getLessons(sourceKey) || [[], [], [], [], []];
     const existing = plannerData[targetKey];
-    const existingNotes = (existing && existing.dayNotes) ? existing.dayNotes : ['', '', '', '', ''];
-    plannerData[targetKey] = { lessons: [[], [], [], [], []], dayNotes: existingNotes };
+    const existingNotes  = (existing && existing.dayNotes)  ? existing.dayNotes  : ['', '', '', '', ''];
+    const existingEvents = (existing && existing.dayEvents) ? existing.dayEvents : ['', '', '', '', ''];
+    plannerData[targetKey] = { lessons: [[], [], [], [], []], dayNotes: existingNotes, dayEvents: existingEvents };
     sourceLessons.forEach((dayLessons, idx) => {
         if (!Array.isArray(dayLessons)) return;
         dayLessons.forEach(lesson => {

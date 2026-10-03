@@ -2717,3 +2717,146 @@ body { font-family: 'Inter', sans-serif; background-color: #e5e3df; color: #444;
     color: #b3aca7;
     font-style: italic;
 }
+
+/* ── Framtid: Monthly Calendar ─────────────────────────────────────────────── */
+.framtid-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+    flex-shrink: 0;
+}
+.framtid-nav-btn {
+    width: 34px;
+    height: 34px;
+    background: white;
+    border: 1px solid #d1cfcb;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #a69085;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+}
+.framtid-nav-btn:hover {
+    background: #f5f3f1;
+    border-color: #a6857e;
+    color: #a6857e;
+}
+.framtid-month-title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin: 0;
+}
+.framtid-grid {
+    display: grid;
+    grid-template-columns: 52px repeat(7, 1fr);
+    gap: 3px;
+}
+.framtid-col-header {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #b0a99f;
+    padding: 4px 0 6px;
+}
+.framtid-week-btn {
+    background: #b0a99f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 4px 2px;
+    text-align: center;
+    transition: background 0.15s;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.framtid-week-btn:hover {
+    background: #a6857e;
+}
+.framtid-day-cell {
+    background: white;
+    border: 1px solid #e5e3df;
+    border-radius: 8px;
+    padding: 5px 6px 6px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: border-color 0.15s;
+}
+.framtid-day-cell:focus-within {
+    border-color: #c8b49a;
+}
+.framtid-other-month {
+    background: #f9f8f7;
+    opacity: 0.75;
+}
+.framtid-weekend {
+    background: #f7f6f5;
+}
+.framtid-today .framtid-date-num {
+    background: #a6857e;
+    color: white;
+    border-radius: 50%;
+}
+.framtid-date-num {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.framtid-event-input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #ece9e5;
+    background: transparent;
+    font-size: 10px;
+    font-family: 'Inter', sans-serif;
+    color: #444;
+    outline: none;
+    padding: 2px 1px;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+.framtid-event-input::placeholder { color: #d4d0cb; font-style: italic; }
+.framtid-event-input:focus { border-bottom-color: #a6857e; }
+.framtid-note-area {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 10px;
+    font-family: 'Inter', sans-serif;
+    color: #555;
+    outline: none;
+    resize: none;
+    padding: 1px;
+    line-height: 1.45;
+    min-height: 38px;
+    box-sizing: border-box;
+    transition: background 0.15s;
+    border-radius: 4px;
+}
+.framtid-note-area::placeholder { color: #d4d0cb; font-style: italic; }
+.framtid-note-area:focus { background: #faf8f6; }

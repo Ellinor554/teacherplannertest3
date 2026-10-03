@@ -5,7 +5,8 @@ import {
 import { ensureWeekExists } from './data.js';
 import { isoWeeksInYear } from './utils.js';
 import { saveData } from './persistence.js';
-import { renderOversikt, renderDayDetail, renderFutureWeeks } from './render.js';
+import { renderOversikt, renderDayDetail } from './render.js';
+import { renderFramtid } from './framtid.js';
 import { saveAndClearLessonTools, restoreLessonTools } from './tools.js';
 import { renderAcademicPlanningView } from './academicPlanning.js';
 import { renderIdag } from './idag.js';
@@ -60,7 +61,7 @@ export function changeView(view) {
     } else if (view === 'framtid') {
         document.getElementById('view-framtid').classList.remove('hidden');
         document.getElementById('btn-framtid').classList.add('active');
-        renderFutureWeeks();
+        renderFramtid();
     } else if (view === 'lasarsplanering') {
         document.getElementById('view-lasarsplanering').classList.remove('hidden');
         document.getElementById('btn-lasarsplanering').classList.add('active');

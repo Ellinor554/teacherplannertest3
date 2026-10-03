@@ -1,6 +1,7 @@
 import { migrateData } from './data.js';
 import { saveData, savePlannerAs, openPlannerFile, downloadBackup, importBackup, updateFileStatus } from './persistence.js';
-import { setInputCallbacks, renderFutureWeeks } from './render.js';
+import { setInputCallbacks } from './render.js';
+import { initFramtid, changeFramtidMonth } from './framtid.js';
 import { refreshUI, changeView, changeWeek, changeWeekTo, goToLesson } from './navigation.js';
 import {
     addLessonPrompt, deleteLesson, goToDayAndAdd,
@@ -94,7 +95,8 @@ window.openPlanningPresentationPicker = openPlanningPresentationPicker;
 window.closePlanningPresentationPicker = closePlanningPresentationPicker;
 window.openCurriculumMap = openCurriculumMap;
 window.archiveCurrentYear = archiveCurrentYear;
-window.openArchiveOverlay = openArchiveOverlay;
+window.openArchiveOverlay     = openArchiveOverlay;
+window.changeFramtidMonth     = changeFramtidMonth;
 
 // ── Initialisation ──────────────────────────────────────────────────────────
 window.onload = () => {
@@ -102,7 +104,7 @@ window.onload = () => {
     saveData(); // persist any format migrations to localStorage
     updateClock();
     setInterval(updateClock, 1000);
-    renderFutureWeeks();
+    initFramtid();
     refreshUI();
     updateFontSize(32);
     initTodo();
