@@ -2842,3 +2842,19 @@ body { font-family: 'Inter', sans-serif; background-color: #e5e3df; color: #444;
     box-sizing: border-box;
     cursor: text;
 }
+.framtid-holiday {
+    font-size: 9px;
+    font-weight: 700;
+    color: #b94040;
+    line-height: 1.2;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.framtid-holiday-cell {
+    background: #fdf8f8;
+}
+.framtid-holiday-cell .framtid-date-num {
+    color: #b94040;
+}
