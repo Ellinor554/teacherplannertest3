@@ -44,10 +44,10 @@ function getWeekKey(date) {
 
 function ensureDayData(weekKey) {
     if (!plannerData[weekKey]) {
-        plannerData[weekKey] = { lessons: [[], [], [], [], []], dayNotes: ['', '', '', '', ''], dayEvents: ['', '', '', '', ''] };
+        plannerData[weekKey] = { lessons: [[], [], [], [], []], dayNotes: ['', '', '', '', '', '', ''], dayEvents: ['', '', '', '', '', '', ''] };
     }
-    if (!plannerData[weekKey].dayNotes)  plannerData[weekKey].dayNotes  = ['', '', '', '', ''];
-    if (!plannerData[weekKey].dayEvents) plannerData[weekKey].dayEvents = ['', '', '', '', ''];
+    if (!plannerData[weekKey].dayNotes)  plannerData[weekKey].dayNotes  = ['', '', '', '', '', '', ''];
+    if (!plannerData[weekKey].dayEvents) plannerData[weekKey].dayEvents = ['', '', '', '', '', '', ''];
 }
 
 function saveNote(weekKey, dayIdx, value) {
@@ -145,24 +145,22 @@ export function renderFramtid() {
             dateEl.textContent = date.getDate();
             cell.appendChild(dateEl);
 
-            if (isWeekday) {
-                // Event (single-line)
-                const eventEl = document.createElement('input');
-                eventEl.type = 'text';
-                eventEl.className = 'framtid-event-input';
-                eventEl.placeholder = 'Händelse...';
-                eventEl.value = plannerData[weekKey]?.dayEvents?.[dayIdx] ?? '';
-                eventEl.addEventListener('input', e => saveEvent(weekKey, dayIdx, e.target.value));
-                cell.appendChild(eventEl);
+            // Event (single-line)
+            const eventEl = document.createElement('input');
+            eventEl.type = 'text';
+            eventEl.className = 'framtid-event-input';
+            eventEl.placeholder = 'Händelse...';
+            eventEl.value = plannerData[weekKey]?.dayEvents?.[dayIdx] ?? '';
+            eventEl.addEventListener('input', e => saveEvent(weekKey, dayIdx, e.target.value));
+            cell.appendChild(eventEl);
 
-                // Note (multi-line)
-                const noteEl = document.createElement('textarea');
-                noteEl.className = 'framtid-note-area custom-scrollbar';
-                noteEl.placeholder = 'Anteckning...';
-                noteEl.value = plannerData[weekKey]?.dayNotes?.[dayIdx] ?? '';
-                noteEl.addEventListener('input', e => saveNote(weekKey, dayIdx, e.target.value));
-                cell.appendChild(noteEl);
-            }
+            // Note (multi-line)
+            const noteEl = document.createElement('textarea');
+            noteEl.className = 'framtid-note-area custom-scrollbar';
+            noteEl.placeholder = 'Anteckning...';
+            noteEl.value = plannerData[weekKey]?.dayNotes?.[dayIdx] ?? '';
+            noteEl.addEventListener('input', e => saveNote(weekKey, dayIdx, e.target.value));
+            cell.appendChild(noteEl);
 
             grid.appendChild(cell);
         });
