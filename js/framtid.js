@@ -73,106 +73,6 @@ function sweHolidays(year) {
     return map;
 }
 
-// ── Skollov ──────────────────────────────────────────────────────────────────
-
-const SKOLLOV_KEY = 'teacher_planner_skollov';
-
-function loadSkollov() {
-    try { return JSON.parse(localStorage.getItem(SKOLLOV_KEY)) || []; }
-    catch { return []; }
-}
-
-function saveSkollov() {
-    localStorage.setItem(SKOLLOV_KEY, JSON.stringify(skollovList));
-}
-
-let skollovList = loadSkollov();
-
-function toDateStr(date) {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-}
-
-function getDateLov(date) {
-    const ds = toDateStr(date);
-    return skollovList.find(l => ds >= l.start && ds <= l.end) || null;
-}
-
-function renderSkollovPanel(container) {
-    const details = document.createElement('details');
-    details.className = 'framtid-lov-details';
-    if (skollovList.length === 0) details.open = true;
-
-    const summary = document.createElement('summary');
-    summary.className = 'framtid-lov-summary';
-    summary.textContent = skollovList.length ? `Skollov (${skollovList.length})` : '+ Skollov';
-    details.appendChild(summary);
-
-    if (skollovList.length > 0) {
-        const list = document.createElement('div');
-        list.className = 'framtid-lov-list';
-        [...skollovList].sort((a, b) => a.start.localeCompare(b.start)).forEach(lov => {
-            const item = document.createElement('div');
-            item.className = 'framtid-lov-item';
-            const label = document.createElement('span');
-            label.className = 'framtid-lov-name';
-            label.textContent = lov.name;
-            const dates = document.createElement('span');
-            dates.className = 'framtid-lov-dates';
-            dates.textContent = `${lov.start} – ${lov.end}`;
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'framtid-lov-remove';
-            removeBtn.textContent = '×';
-            removeBtn.addEventListener('click', () => {
-                skollovList = skollovList.filter(l => l.id !== lov.id);
-                saveSkollov();
-                renderFramtid();
-            });
-            item.appendChild(label);
-            item.appendChild(dates);
-            item.appendChild(removeBtn);
-            list.appendChild(item);
-        });
-        details.appendChild(list);
-    }
-
-    const form = document.createElement('div');
-    form.className = 'framtid-lov-form';
-
-    const nameInput = document.createElement('input');
-    nameInput.type = 'text';
-    nameInput.placeholder = 'Namn (t.ex. Höstlov)';
-    nameInput.className = 'framtid-lov-input';
-
-    const startInput = document.createElement('input');
-    startInput.type = 'date';
-    startInput.className = 'framtid-lov-input';
-
-    const endInput = document.createElement('input');
-    endInput.type = 'date';
-    endInput.className = 'framtid-lov-input';
-
-    const addBtn = document.createElement('button');
-    addBtn.className = 'framtid-lov-add-btn';
-    addBtn.textContent = 'Spara';
-    addBtn.addEventListener('click', () => {
-        const name  = nameInput.value.trim();
-        const start = startInput.value;
-        const end   = endInput.value;
-        if (!name || !start || !end || start > end) return;
-        skollovList.push({ id: Date.now(), name, start, end });
-        saveSkollov();
-        renderFramtid();
-    });
-
-    form.appendChild(nameInput);
-    form.appendChild(startInput);
-    form.appendChild(endInput);
-    form.appendChild(addBtn);
-    details.appendChild(form);
-
-    container.appendChild(details);
-}
-
 // ── Calendar helpers ─────────────────────────────────────────────────────────
 
 export function initFramtid() {
@@ -252,9 +152,6 @@ export function renderFramtid() {
     header.appendChild(nextBtn);
     container.appendChild(header);
 
-    // Skollov panel
-    renderSkollovPanel(container);
-
     // Grid
     const grid = document.createElement('div');
     grid.className = 'framtid-grid';
@@ -286,16 +183,14 @@ export function renderFramtid() {
             const inMonth = date.getMonth() === viewMonth && date.getFullYear() === viewYear;
             const isToday = date.toDateString() === today.toDateString();
             const holiday = sweHolidays(date.getFullYear()).get(dKey(date));
-            const lov     = getDateLov(date);
 
             const cell = document.createElement('div');
             cell.className = [
                 'framtid-day-cell',
-                !inMonth   ? 'framtid-other-month'  : '',
-                isToday    ? 'framtid-today'         : '',
-                dayIdx > 4 ? 'framtid-weekend'       : '',
-                holiday    ? 'framtid-holiday-cell'  : '',
-                lov        ? 'framtid-lov-cell'      : '',
+                !inMonth   ? 'framtid-other-month' : '',
+                isToday    ? 'framtid-today'        : '',
+                dayIdx > 4 ? 'framtid-weekend'      : '',
+                holiday    ? 'framtid-holiday-cell' : '',
             ].filter(Boolean).join(' ');
 
             const dateEl = document.createElement('div');
@@ -308,13 +203,6 @@ export function renderFramtid() {
                 holEl.className = 'framtid-holiday';
                 holEl.textContent = holiday;
                 cell.appendChild(holEl);
-            }
-
-            if (lov) {
-                const lovEl = document.createElement('div');
-                lovEl.className = 'framtid-lov-label';
-                lovEl.textContent = lov.name;
-                cell.appendChild(lovEl);
             }
 
             const noteEl = document.createElement('textarea');
