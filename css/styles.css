@@ -2858,3 +2858,96 @@ body { font-family: 'Inter', sans-serif; background-color: #e5e3df; color: #444;
 .framtid-holiday-cell .framtid-date-num {
     color: #b94040;
 }
+.framtid-lov-cell {
+    background: #eef2ff;
+}
+.framtid-lov-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: #5b7cd4;
+    line-height: 1.2;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.framtid-lov-details {
+    margin: 0 0 12px;
+    background: white;
+    border: 1px solid #e5e3df;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.framtid-lov-summary {
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #5b7cd4;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+}
+.framtid-lov-summary::-webkit-details-marker { display: none; }
+.framtid-lov-list {
+    padding: 2px 14px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.framtid-lov-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+}
+.framtid-lov-name {
+    font-weight: 600;
+    color: #5b7cd4;
+    min-width: 90px;
+}
+.framtid-lov-dates {
+    color: #999;
+    font-size: 10px;
+}
+.framtid-lov-remove {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #bbb;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 2px;
+}
+.framtid-lov-remove:hover { color: #e55; }
+.framtid-lov-form {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 8px 14px 10px;
+    border-top: 1px solid #f0ede9;
+}
+.framtid-lov-input {
+    border: 1px solid #e5e3df;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-family: inherit;
+    color: #444;
+    outline: none;
+    background: white;
+}
+.framtid-lov-input[type="text"] { flex: 1; min-width: 120px; }
+.framtid-lov-input:focus { border-color: #5b7cd4; }
+.framtid-lov-add-btn {
+    background: #5b7cd4;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+}
+.framtid-lov-add-btn:hover { background: #4a6bc3; }
