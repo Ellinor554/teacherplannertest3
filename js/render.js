@@ -71,7 +71,7 @@ export function renderOversikt() {
             </div>
             <div class="mt-auto pt-4 border-t border-gray-100">
                 <label class="text-[10px] font-bold uppercase text-gray-400 mb-1 block">Anteckningar</label>
-                <textarea class="notes-area custom-scrollbar" placeholder="Möte, rastvakt..." oninput="window.saveDayNote(${idx}, this.value)">${notes}</textarea>
+                <textarea class="notes-area custom-scrollbar" spellcheck="true" placeholder="Möte, rastvakt..." oninput="window.saveDayNote(${idx}, this.value)">${notes}</textarea>
             </div>
         `;
         container.appendChild(card);

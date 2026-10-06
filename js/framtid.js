@@ -207,6 +207,7 @@ export function renderFramtid() {
 
             const noteEl = document.createElement('textarea');
             noteEl.className = 'framtid-note-area custom-scrollbar';
+            noteEl.spellcheck = true;
             noteEl.value = plannerData[weekKey]?.dayNotes?.[dayIdx] ?? '';
             noteEl.addEventListener('input', e => saveNote(weekKey, dayIdx, e.target.value));
             cell.appendChild(noteEl);
