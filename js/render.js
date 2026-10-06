@@ -162,6 +162,7 @@ export function renderDayDetail() {
         document.getElementById('sb-subject').innerText = 'Inga lektioner';
         document.getElementById('sb-time').innerText = "Klicka på '+ Ny lektion' för att börja";
         document.getElementById('sb-plan').innerHTML = '';
+        document.getElementById('sb-plan-right').innerHTML = '';
         setActiveLessonId(null);
         updateNotesButtonState(null);
     }

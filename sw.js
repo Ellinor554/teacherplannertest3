@@ -1,4 +1,4 @@
-const CACHE_NAME = 'larplanering-v2';
+const CACHE_NAME = 'larplanering-v3';
 const URLS_TO_CACHE = [
   '.',
   './index.html',
@@ -20,6 +20,8 @@ const URLS_TO_CACHE = [
   './js/subjects.js',
   './js/todo.js',
   './js/academicPlanning.js',
+  './js/framtid.js',
+  './js/idag.js',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap'
 ];

@@ -29,9 +29,18 @@ export function migrateData() {
     Object.keys(plannerData).forEach(key => {
         const val = plannerData[key];
         if (Array.isArray(val)) {
-            plannerData[key] = { lessons: val, dayNotes: ['', '', '', '', ''] };
+            plannerData[key] = { lessons: val, dayNotes: ['', '', '', '', '', '', ''] };
         } else if (val && !val.lessons) {
-            plannerData[key] = { lessons: [[], [], [], [], []], dayNotes: ['', '', '', '', ''] };
+            plannerData[key] = { lessons: [[], [], [], [], []], dayNotes: ['', '', '', '', '', '', ''] };
+        } else if (val) {
+            // Extend short arrays to 7 and replace any null slots with ''
+            if (!val.dayNotes) val.dayNotes = ['', '', '', '', '', '', ''];
+            while (val.dayNotes.length < 7) val.dayNotes.push('');
+            val.dayNotes = val.dayNotes.map(v => v == null ? '' : v);
+
+            if (!val.dayEvents) val.dayEvents = ['', '', '', '', '', '', ''];
+            while (val.dayEvents.length < 7) val.dayEvents.push('');
+            val.dayEvents = val.dayEvents.map(v => v == null ? '' : v);
         }
     });
 }
@@ -47,8 +56,8 @@ export function sortPlannerData(weekKey, dayIdx) {
 export function copySchedule(sourceKey, targetKey) {
     const sourceLessons = getLessons(sourceKey) || [[], [], [], [], []];
     const existing = plannerData[targetKey];
-    const existingNotes  = (existing && existing.dayNotes)  ? existing.dayNotes  : ['', '', '', '', ''];
-    const existingEvents = (existing && existing.dayEvents) ? existing.dayEvents : ['', '', '', '', ''];
+    const existingNotes  = (existing && existing.dayNotes)  ? existing.dayNotes  : ['', '', '', '', '', '', ''];
+    const existingEvents = (existing && existing.dayEvents) ? existing.dayEvents : ['', '', '', '', '', '', ''];
     plannerData[targetKey] = { lessons: [[], [], [], [], []], dayNotes: existingNotes, dayEvents: existingEvents };
     sourceLessons.forEach((dayLessons, idx) => {
         if (!Array.isArray(dayLessons)) return;
@@ -81,7 +90,7 @@ export function ensureWeekExists() {
         copySchedule(sourceKey, weekKey);
         plannerData[weekKey]._copiedFrom = sourceKey;
     } else {
-        plannerData[weekKey] = { lessons: [[], [], [], [], []], dayNotes: ['', '', '', '', ''] };
+        plannerData[weekKey] = { lessons: [[], [], [], [], []], dayNotes: ['', '', '', '', '', '', ''] };
     }
 }
 
