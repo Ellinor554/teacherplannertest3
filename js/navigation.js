@@ -42,7 +42,8 @@ export function changeView(view) {
     const isAcademic  = view === 'lasarsplanering';
     const isIdag      = view === 'idag';
     const isDayDetail = ['mandag', 'tisdag', 'onsdag', 'torsdag', 'fredag'].includes(view);
-    document.getElementById('week-nav').classList.toggle('hidden', isAcademic || isIdag || isDayDetail);
+    const isFramtid = view === 'framtid';
+    document.getElementById('week-nav').classList.toggle('hidden', isAcademic || isIdag || isDayDetail || isFramtid);
     document.getElementById('day-nav').classList.toggle('hidden', !isDayDetail);
     document.getElementById('academic-planning-title').classList.toggle('hidden', !isAcademic);
     const kursplanBtn = document.getElementById('kursplan-top-btn');
